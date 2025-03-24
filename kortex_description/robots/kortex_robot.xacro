@@ -30,7 +30,7 @@
                 <origin xyz="0 0 0" rpy="0 0 0" />    
             </joint> 
         </xacro:if>
-        
+
         <!-- Load the arm -->
         <xacro:load_arm parent="" dof="${dof}" vision="${vision}" prefix="${prefix}">
             <origin xyz="0 0 0" rpy="0 0 0"/> 

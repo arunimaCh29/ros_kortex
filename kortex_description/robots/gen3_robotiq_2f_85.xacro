@@ -15,4 +15,14 @@
     <xacro:include filename="$(find kortex_description)/robots/kortex_robot.xacro" />
     <xacro:load_robot arm="$(arg arm)" gripper="$(arg gripper)" dof="$(arg dof)" vision="$(arg vision)" sim="$(arg sim)" prefix="$(arg prefix)" />
 
+    <!-- <xacro:include filename="$(find robothon_2023_board_description)/urdf/task_board.urdf.xacro"/> -->
+    <!-- <xacro:task_board board_id="$(arg board_id)" height="0.085"/> -->
+
+    <!-- Connect the task board to the world -->
+    <!-- <joint name="$(arg board_id)_to_world" type="fixed">
+        <parent link="$(arg prefix)base_link"/>
+        <child link="$(arg board_id)_base_link"/>
+        <origin xyz="1 0 0" rpy="0 0 0"/> 
+    </joint> -->
+
 </robot>

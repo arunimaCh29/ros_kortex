@@ -5,6 +5,9 @@
   <!-- Propagate last link name information because it is the gripper's parent link -->
   <xacro:property name="last_arm_link" value="end_effector_link"/>
 
+  <!-- Include the task_board xacro file -->
+  <!-- <xacro:include filename="$(find robothon_2023_board_description)/urdf/task_board.urdf.xacro"/> -->
+
   <xacro:macro name="load_arm" params="parent:='' dof vision prefix *origin">
       <link name="${prefix}base_link">
         <inertial>
@@ -315,22 +318,56 @@
     <xacro:if value="${vision}">
       <link name="${prefix}camera_link" />
       <joint name="${prefix}camera_module" type="fixed">
-        <origin xyz="0 0.05639 -0.00305" rpy="3.14159265358979 3.14159265358979 0" />
+        <origin xyz="0 0.05639 -0.00305" rpy="-1.57 -1.57 0" />
         <parent link="${prefix}end_effector_link" />
         <child  link="${prefix}camera_link" />
       </joint>
       <link name="${prefix}camera_depth_frame" />
       <joint name="${prefix}depth_module" type="fixed">
-        <origin xyz="0.0275 0.066 -0.00305" rpy="3.14159265358979 3.14159265358979 0" />
+        <origin xyz="0.0275 0.066 -0.00305" rpy="-1.57 -1.57 0" />
         <parent link="${prefix}end_effector_link" />
         <child  link="${prefix}camera_depth_frame" />
       </joint>
       <link name="${prefix}camera_color_frame" />
       <joint name="${prefix}color_module" type="fixed">
-        <origin xyz="0 0.05639 -0.00305" rpy="3.14159265358979 3.14159265358979 0" />
+        <origin xyz="0 0.05639 -0.00305" rpy="-1.57 -1.57 0" />
         <parent link="${prefix}end_effector_link" />
         <child  link="${prefix}camera_color_frame" />
       </joint>
     </xacro:if>
+
+    <gazebo reference="${prefix}camera_link">
+      <sensor type="camera" name="camera_sensor">
+        <camera>
+          <horizontal_fov>1.3962634</horizontal_fov>
+          <image>
+            <width>640</width>
+            <height>480</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.1</near>
+            <far>100</far>
+          </clip>
+        </camera>
+        <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+          <alwaysOn>true</alwaysOn>
+          <updateRate>30</updateRate>
+          <cameraName>camera</cameraName>
+          <imageTopicName>image_raw</imageTopicName>
+          <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+          <frameName>$(arg color_frame_id)</frameName>
+        </plugin>
+      </sensor>
+    </gazebo>
+
+    <!-- Add the task board -->
+    <!-- <xacro:task_board board_id="task_board" height="0.085"/>
+    <joint name="task_board_to_world" type="fixed">
+        <parent link="world"/>
+        <child link="task_board_base_link"/>
+        <origin xyz="5 0 0" rpy="0 0 0"/> 
+    </joint> -->
+
   </xacro:macro>
 </robot>
