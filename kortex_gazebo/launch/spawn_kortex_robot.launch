@@ -5,6 +5,7 @@
     <arg name="start_gazebo" default="true"/>
     <arg name="gazebo_gui"   default ="true"/>
     <arg name="start_rviz" default="true"/>
+    <arg name="load_task_board" default="true"/>
     
     <!-- Initial position in Gazebo -->
     <arg name="x0" default="0"/>
@@ -18,17 +19,20 @@
     <arg name="vision" default="true"/> <!-- True if the arm has a Vision module -->
     
     <!-- Default gripper for Gen3 is none, default gripper for Gen3 lite is gen3_lite_2f -->
-    <arg name="gripper" default="" if="$(eval arg('arm') == 'gen3')"/>
+    <!-- <arg name="gripper" default="" if="$(eval arg('arm') == 'gen3')"/> -->
+    <arg name="gripper" default="robotiq_2f_85" if="$(eval arg('arm') == 'gen3')"/>
     <arg name="gripper" default="gen3_lite_2f" if="$(eval arg('arm') == 'gen3_lite')"/>
     
     <arg name="robot_name" default="my_$(arg arm)"/>
     <arg name="prefix" default=""/>
-    <arg name="cyclic_data_publish_rate" default="40"/> <!--Hz-->
+    <arg name="cyclic_data_publish_rate" default="30"/> <!--Hz-->
 
     <!-- Gazebo parameters -->
     <arg name="use_sim_time" default="true"/>
     <arg name="debug" default="false" />
-    <arg name="paused" default="true"/>
+    <arg name="paused" default="true"/> 
+
+    <arg name="color_frame_id" default="camera_color_frame"/>
 
     <!-- Start Gazebo -->
     <include file="$(find kortex_gazebo)/launch/start_gazebo.launch" if="$(arg start_gazebo)">
@@ -45,11 +49,14 @@
 
         <!-- Load the description for the robot -->
         <!-- Without gripper -->
-        <param name="robot_description" command="$(find xacro)/xacro --inorder $(find kortex_description)/robots/$(arg arm).xacro dof:=$(arg dof) vision:=$(arg vision) sim:=true prefix:=$(arg prefix)"
+        <param name="robot_description" command="$(find xacro)/xacro --inorder $(find kortex_description)/robots/$(arg arm).xacro dof:=$(arg dof) vision:=$(arg vision) sim:=true prefix:=$(arg prefix) color_frame_id:=$(arg color_frame_id)"
             if="$(eval not arg('gripper'))"/>
         <!-- With gripper -->
-        <param name="robot_description" command="$(find xacro)/xacro --inorder $(find kortex_description)/robots/$(arg arm)_$(arg gripper).xacro dof:=$(arg dof) vision:=$(arg vision) sim:=true prefix:=$(arg prefix)"
+        <param name="robot_description" command="$(find xacro)/xacro --inorder $(find kortex_description)/robots/$(arg arm)_$(arg gripper).xacro dof:=$(arg dof) vision:=$(arg vision) sim:=true prefix:=$(arg prefix) color_frame_id:=$(arg color_frame_id)"
             unless="$(eval not arg('gripper'))"/>
+
+        <!-- <param name="task_board_description" command="$(find xacro)/xacro $(find robothon_2023_board_description)/urdf/task_board.urdf.xacro " /> -->
+        <param name="task_board_description" command="$(find xacro)/xacro $(find robothon_2023_board_description)/urdf/task_board_gazebo.urdf.xacro " />
 
         <!-- Spawn the robot in Gazebo -->
         <!-- <rosparam command="load" file="$(find kortex_description)/arms/$(arg arm)/$(arg dof)dof/config/gazebo_initial_joint_positions.yaml"/> -->
@@ -78,6 +85,9 @@
                 -J $(arg prefix)joint_6 -1.00
                 -J $(arg prefix)joint_7 1.57"
         unless="$(eval not arg('gripper'))"/> <!--TODO-->
+
+        <node if="$(arg load_task_board)" name="task_board_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+        args="-urdf -param task_board_description -model task_board -x 0.55 -y 0.35 -z 0.0" />
 
         <!-- Load controller configuration file from kortex_control package -->
         <rosparam file="$(find kortex_control)/arms/$(arg arm)/$(arg dof)dof/config/joint_position_controllers.yaml" command="load" subst_value="true"/>
@@ -163,8 +173,19 @@
         </test> 
 
         <!-- Start RViz -->
-        <node name="rviz" pkg="rviz" type="rviz" if="$(arg start_rviz)"/> 
+        <node name="rviz" pkg="rviz" type="rviz" args="-d $(find kortex_gazebo)/configs/rl.rviz" if="$(arg start_rviz)"/> 
     
     </group>
 
+    <!-- <include if="$(arg load_task_board)" file="$(find kinova_task_board)/launch/table.launch">
+        <arg name="x_pos" value="1"/>
+        <arg name="y_pos" value="0"/>
+        <arg name="z_pos" value="0"/>
+    </include> -->
+    <!-- <param name="task_board_description" command="$(find xacro)/xacro inorder $(find robothon_2023_board_description)/urdf/task_board.urdf.xacro"/> -->
+
+    <!-- Spawn the task board in Gazebo -->
+    <!-- <node name="task_board_spawner" pkg="gazebo_ros" type="spawn_model" args="-urdf -param task_board_description -model task_board -x $(arg x0) -y $(arg y0) -z $(arg z0)"/> -->
+    <!-- <node name="task_board_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+        args="-urdf -param task_board_description -model $(arg robot_name) -x $(arg x0) -y $(arg y0) -z $(arg z0)"/> -->
 </launch>

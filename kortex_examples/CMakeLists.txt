@@ -54,6 +54,8 @@ catkin_install_python(PROGRAMS src/actuator_config/example_actuator_configuratio
                                src/full_arm/example_waypoint_action_client.py
                                src/move_it/example_move_it_trajectories.py
                                src/vision_config/example_vision_configuration.py 
+                               src/tests/position_control_test.py
+                               src/tests/cartesian_csv.py
                       DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 ## Mark executables and/or libraries for installation

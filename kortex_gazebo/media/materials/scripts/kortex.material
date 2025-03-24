@@ -2,22 +2,81 @@ material Kortex/Gray
 {
   technique
   {
-    pass ambient
+    pass
     {
       ambient 0.803 0.824 0.820
       diffuse 0.803 0.824 0.820
+      texture_unit
+      {
+        texture rainbow_table.png
+      }
     }
   }
 }
 
-material Kortex/Blue
+material Kortex/White
 {
   technique
   {
-    pass ambient
+    pass
     {
-      ambient 0 0.055 0.525
-      diffuse 0 0.055 0.525
+      ambient 0.803 0.824 0.820
+      diffuse 0.803 0.824 0.820
+      texture_unit
+      {
+        texture color_spiral.png
+      }
+    }
+    
+  }
+}
+
+material Kortex/Red
+{
+  technique
+  {
+    pass
+    {
+      ambient 0.803 0.824 0.820
+      diffuse 0.803 0.824 0.820
+      texture_unit
+      {
+        texture coloured_wall.jpg
+      }
+    }
+    
+  }
+}
+
+material Kortex/Orange
+{
+  technique
+  {
+    pass
+    {
+      ambient 0.803 0.824 0.820
+      diffuse 0.803 0.824 0.820
+      texture_unit
+      {
+        texture stripes_color.jpg
+      }
+    }
+    
+  }
+}
+
+material Kortex/Floor
+{
+  technique
+  {
+    pass
+    {
+      ambient 0.803 0.824 0.820
+      diffuse 0.803 0.824 0.820
+      texture_unit
+      {
+        texture stripes_color.jpg
+      }
     }
   }
 }

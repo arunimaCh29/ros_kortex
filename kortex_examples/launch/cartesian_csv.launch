@@ -1,0 +1,16 @@
+    <launch>
+
+        <!-- Robot namespace -->
+        <arg name="robot_name" default="my_gen3"/>
+        <arg name="start_delay_seconds" default="0"/>
+        <arg name="sim" default="true"/>
+        <arg name="prefix" default=""/>
+    
+        <!-- Launch the example in that namespace -->
+        <node name="cartesian_csv" pkg="kortex_examples" type="cartesian_csv.py" output="screen" launch-prefix="bash -c 'sleep $(arg start_delay_seconds); $0 $@' ">
+            <param name="robot_name" value="$(arg robot_name)"/>
+            <param name="sim" value="$(arg sim)"/>
+            <param name="prefix" value="$(arg prefix)"/>
+        </node>
+
+    </launch>

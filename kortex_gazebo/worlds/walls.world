@@ -1,0 +1,129 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <world name="striped_walls_world">
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <!-- Define Wall Material with Striped Texture -->
+    <material name="striped_material">
+      <script>
+        <uri>file://media/materials/scripts/gazebo.material</uri>
+        <name>Gazebo/Stripes</name>
+      </script>
+    </material>
+
+    <!-- Define Walls -->
+    <model name="walls">
+      <static>true</static>
+      <link name="wall1">
+        <visual name="wall1_visual">
+          <geometry>
+            <box>
+              <size>10 0.2 6</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/kortex.material</uri>
+              <name>Kortex/Gray</name>
+            </script>
+            <texture>
+              <diffuse>file://$(find kortex_gazebo)/media/materials/textures/rainbow_table.png</diffuse>
+              <normal>file://$(find kortex_gazebo)/media/materials/textures/rainbow_table.png</normal>
+            </texture>
+          </material>
+        </visual>
+        <pose>0 3 1.5 0 0 0</pose>
+      </link>
+      
+      <link name="wall2">
+        <visual name="wall2_visual">
+          <geometry>
+            <box>
+              <size>10 0.2 6</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/kortex.material</uri>
+              <name>Kortex/White</name>
+            </script>
+            <texture>
+              <diffuse>file://$(find kortex_gazebo)/media/materials/textures/color_spiral.png</diffuse>
+              <normal>file://$(find kortex_gazebo)/media/materials/textures/color_spiral.png</normal>
+            </texture>
+          </material>
+        </visual>
+        <pose>0 -5 1.5 0 0 0</pose>
+      </link>
+      
+      <link name="wall3">
+        <visual name="wall3_visual">
+          <geometry>
+            <box>
+              <size>0.2 10 6</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/kortex.material</uri>
+              <name>Kortex/Red</name>
+            </script>
+            <texture>
+              <diffuse>file://$(find kortex_gazebo)/media/materials/textures/coloured_wall.jpg</diffuse>
+              <normal>file://$(find kortex_gazebo)/media/materials/textures/coloured_wall.jpg</normal>
+            </texture>
+          </material>
+        </visual>
+        <pose>3 0 1.5 0 0 0</pose>
+      </link>
+      
+      <!-- <link name="wall4">
+        <visual name="wall4_visual">
+          <geometry>
+            <box>
+              <size>0.2 10 6</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/kortex.material</uri>
+              <name>Kortex/Orange</name>
+            </script>
+            <texture>
+              <diffuse>file://$(find kortex_gazebo)/media/materials/textures/stripes_color.jpg</diffuse>
+              <normal>file://$(find kortex_gazebo)/media/materials/textures/stripes_color.jpg</normal>
+            </texture>
+          </material>
+        </visual>
+        <pose>-5 0 1.5 0 0 0</pose>
+      </link> -->
+      
+    </model>
+
+    <!-- Custom Ground Plane -->
+    <model name="custom_ground_plane">
+      <static>true</static>
+      <link name="ground_link">
+        <visual name="ground_visual">
+          <geometry>
+            <box>
+              <size>15 25 0.01</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/kortex.material</uri>
+              <name>Kortex/Floor</name>
+            </script>
+          </material>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+      </link>
+    </model>
+  </world>
+</sdf>
